@@ -49,6 +49,7 @@ class Menu extends React.Component {
             title={section.title}
             imageURL={section.imageUrl}
             size={section.size}
+            linkUrl={section.linkUrl}
           />
         ))}
       </div>
