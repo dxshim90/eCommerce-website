@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import HompePage from "./HompePage";
+import HompePage from "./Pages/Homepage/HompePage";
 
 function App() {
   return (
