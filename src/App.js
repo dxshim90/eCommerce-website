@@ -5,7 +5,10 @@ import ShopPage from "../src/Pages/Shop/Shop";
 import { Route, Switch } from "react-router-dom";
 import Header from "../src/Components/Header/Header";
 import SigninSignup from "./Pages/SigninAndSignup/SigninAndSignup";
-import { auth } from "../src/Firebase/Firebase.utils";
+import {
+  auth,
+  createuserProfileDocument
+} from "../src/Firebase/Firebase.utils";
 
 class App extends React.Component {
   state = {
@@ -15,11 +18,22 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({
-        currentUser: user
-      });
-      console.log(this.state.currentUser);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createuserProfileDocument(userAuth);
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+        });
+      } else {
+        this.setState({
+          currentUser: userAuth
+        });
+      }
     });
   }
 
